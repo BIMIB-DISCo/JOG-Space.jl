@@ -77,19 +77,27 @@ Next, the user need to copy the project folder in the chosen working directory. 
 1. Using REPL or the COMMAND LINE move to the working directory.  
 2. If you use the COMMAND LINE, to start a Julia session run the command:
 
+```julia
 > julia
+```
 
-3. To enter in the Pkg REPL  type 
+3. To enter in the Pkg REPL  type `]`
 
->]  
+```julia
+(@v1.10) pkg>
+```
 
-4. Type the command 
-> activate .
+4. Type the command
+
+```julia
+(@v1.10) pkg> activate .
+```
 
 5. To activate the J-SPACE project, type
-> instantiate
-	
 
+```julia
+(@v1.10) pkg> instantiate
+```
 
 ## RUN J-SPACE
 
@@ -97,22 +105,30 @@ Next, the user need to copy the project folder in the chosen working directory. 
 The parameters and the configuration of the simulation are managment by the user by modifing the files "Parameters.toml" and "Config.toml" (the name of the file is not mandatory),  that are detailed in the next sections.  
 To run a simulation of J-SPACE using the ".toml" file for the paramet follow the following step:
 
-1. Load the J-SPACE package using:
-> using J_Space  
+1. Load the J-SPACE package using
+```julia
+> using J_Space
+```
 
 2. Start the simulation
-> Start_J_Space("Parameters.toml","Config.toml")  
-
+```julia
+> Start_J_Space("Parameters.toml", "Config.toml")
+```
 
 NOTE: the simulation does not start if in the working folder are absent the two .toml files. 
 
 ### RUN THE EXAMPLES
-To run the examples, in the main folder of J-SPACE, from command line digit 
-> julia --project=.  ./Experiments/Experiment_2D/experiment_2D.jl  
+To run the examples, in the main folder of J-SPACE, from command line digit
+
+```julia
+> julia --project=.  ./test/data/Experiments/Experiment_2D/experiment_2D.jl  
+```
 
 or
-> julia --project=.  ./Experiments/Experiment_3D/experiment_3D.jl
 
+```julia
+> julia --project=.  ./test/data/Experiments/Experiment_3D/experiment_3D.jl
+```
 
 #### Run the variant calling pipeline
 ##### Necessary package
@@ -120,30 +136,38 @@ or
 - download the file `j_space_pipeline.sh`
 - conda https://docs.conda.io/en/latest/
 - gatk https://storage.googleapis.com/gatk-software/package-archive/gatk/GenomeAnalysisTK-3.8-1-0-gf15c1c3ef.tar.bz2
+
 ##### Run the variant calling
 First move where is file `environment_j_space.yml`
 
 Change field name and prefix into `environment_j_space.yml`
 
 Open the conda environment
-> conda env create -f environment_j_space.yml --prefix "path to the enviroment directory"  
+```julia
+> conda env create -f environment_j_space.yml --prefix "path to the enviroment directory"
+```
 
 Activate the conda environment
+```julia
 > conda activate "path to the enviroment directory"  
+```
 
 Then register to gatk (Not necessary in the same working folder)
-> gatk3-register "path to the gatk directory"  
+```julia
+> gatk3-register "path to the gatk directory"
+```
 
 Move into working folder where you have `j_space_pipeline.sh` 
-Run pipeline  
-> ./j_space_pipeline.sh "path/to/reference/" "path/to/FastaQ" "path/working/directory"  
+Run pipeline
+```julia
+> ./j_space_pipeline.sh "path/to/reference/" "path/to/FastaQ" "path/working/directory"
+```
 
 - the first, "path/to/reference/", indicate where is the reference fasta, must specificated file.fasta
 - the second, "path/to/FastaQ", indicate where are the file FastaQ to analyzed, must specificated the folder
 - the third, "path/working/directory", indicate your working directory, where will save output files
 
 NOTE: the paths are absolute paths 
-
 
 
 ## OUTPUTS OF J-SPACE
@@ -158,7 +182,6 @@ NOTE: the paths are absolute paths
   - The alignment file, which maps the noisy reads on the sequences of the sampled cells both in formats SAM and ALN.
   - The alignment file, without noise in format SAM.
   - The list of the mutations for each sample as csv.
-
 
 
 ## THE CONFIGURATION FILE OF J-SPACE
@@ -241,7 +264,8 @@ In the file "Parameters.toml" the user will find all the paramenters of the dyna
  if `sub_models = "TrN93ef"`  -> `params = [{"alpha" = 0.5, "alpha2"=0.1,"beta" = 0.3}]`.     
  if `sub_models = "TrN" `-> `params = [{"alpha" = 0.5, "alpha2"=0.1,"beta" = 0.3}]`.     
  if `sub_models = "K81" ` -> `params = [{"alpha" = 0.5, "beta"=0.1,"beta2" = 0.3}]`.    
- if `sub_models = "K81uf"`  -> `params = [{"alpha" = 0.5, "beta"=0.1,"beta2" = 0.3}]`.     
+ if `sub_models = "K81uf"`  -> `params = [{"alpha" = 0.5, "beta"=0.1,"beta2" = 0.3}]`.
+
 #### if sub_model = "SBS-37" or "SBS-38" J-Space uses a mutational signature based substitution model
 
 - `mut_rate_avg`. A real number, the average mutational rate per trinucleotide and unit of time. 
@@ -252,6 +276,7 @@ In the file "Parameters.toml" the user will find all the paramenters of the dyna
 - `vector_activities`. A vector of vectors. For each elements of `vector_change_points` it is necessary insert an array with the values of the activities for each signature (e.g., if `vector_change_points` has two elements `vector_activities = [[0.7,0.2,0.1], [0.0,0.3,0.7]]
 `)
 - `ratio_background_signature`. A real number between 1.0 and 0.0. If 1.0 all mutation will be due to mutational signatures, if 0 all ther mutations will be due to the background  process.
+
 ### Parameters of the bulk experiment (approximate version, very fast does not need ART, but it generates the VAF, not the reads. Working only if `type_isa = 1`)
 - `coverage`. Real number, average coverage of the simulate bulk experiment.
  - `FP`. Real number,  false positive rate.
@@ -259,6 +284,7 @@ In the file "Parameters.toml" the user will find all the paramenters of the dyna
 
 ### Parameters of the sequencing experiment (ART)
 - `command`. A string, if the user want to do custom calls of ART, e.g., `command = "art_illumina -ss HS25 -sam -i reference.fa -l 150 -f 10 -o single_dat"`.
+
 #### If `command = ""`  for Illumina sequencing system is possible to compile the following parameters
 - `profile`. String, the name of Illumina sequencing system of the built-in profile used for simulation, e.g.,`profile = "HS25"`.
 - `len_read`. Integer, the length of reads to be simulated.
@@ -272,7 +298,6 @@ In the file "Parameters.toml" the user will find all the paramenters of the dyna
 #### if `paired_end = 1`,  are required the following 
 - `mean_fragsize`. Integer, the mean size of DNA/RNA fragments for paired-end simulations.
 - `std_fragsize`. Integer, the standard deviation of DNA/RNA fragment size for paired-end simulations.
-
 
 For all paramenters of ART  please see: https://www.niehs.nih.gov/research/resources/software/biostatistics/art/index.cfm
 
